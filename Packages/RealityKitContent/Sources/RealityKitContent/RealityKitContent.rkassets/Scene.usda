@@ -1,0 +1,57 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+reorder rootPrims = ["Root", "GridMaterial"]
+
+def Xform "Root"
+{
+    rel material:binding = None (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+
+    def "SkySphere" (
+        active = true
+        prepend references = @SkySphere.usdz@
+    )
+    {
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float3 xformOp:scale = (1, 1, 1)
+
+        def RealityKitComponent "ImageBasedLight"
+        {
+            asset ibl = @warm_reception_dinner_4k.hdr@
+            uniform token info:id = "RealityKit.ImageBasedLight"
+            bool isGlobalIBL = 0
+        }
+
+        over "SkySphere_mat"
+        {
+            asset inputs:SkySphere_Texture = @warm_reception_dinner_4k.hdr@
+        }
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Default"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (199.99997, 200, 199.99994)
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                    float3 position = (0.000011444092, 0, -0.0000038146973)
+                }
+            }
+        }
+    }
+}
+
